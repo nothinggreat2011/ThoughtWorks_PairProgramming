@@ -1,11 +1,9 @@
-package com.bcus.letspark.parking;
+package traveller;
 
-/**
- * Created by sawai on 4/21/2015.
- */
+
 public class Car {
 
-    private String vehicleIdentificationNumber;
+    private final String vehicleIdentificationNumber;
 
     public Car(String vehicleIdentificationNumber) {
         this.vehicleIdentificationNumber = vehicleIdentificationNumber;

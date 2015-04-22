@@ -1,4 +1,4 @@
-package com.bcus.letspark.parking;
+package traveller;
 
 
 import org.junit.Test;
@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class CarTest {
 
-    Car car;
+    private Car car;
 
     @Test
     public void createCar() {

@@ -3,6 +3,7 @@ package com.bcus.letspark.parking;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import traveller.Car;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -10,8 +11,8 @@ import static org.junit.Assert.*;
 public class ParkingLotTest {
 
     @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-    private int parkingSize = 2;
+    public final ExpectedException expectedException = ExpectedException.none();
+    private final int parkingSize = 2;
 
     @Test
     public void createParkingLot()
@@ -24,7 +25,7 @@ public class ParkingLotTest {
     public void addCarToParkingLotShouldReturnParkingToken() throws Exception {
         ParkingLot parkingLot = new ParkingLot(parkingSize);
         Car car = new Car("some id");
-        boolean isCarParked = parkingLot.parkMyCar(car);
+        boolean isCarParked = parkingLot.parkCar(car);
         assertTrue(isCarParked);
     }
 
@@ -32,7 +33,7 @@ public class ParkingLotTest {
     public void parkingTokenShouldNotBeLessThanOne() throws Exception {
         ParkingLot parkingLot = new ParkingLot(parkingSize);
         Car car = new Car("some id");
-        boolean isCarParked = parkingLot.parkMyCar(car);
+        boolean isCarParked = parkingLot.parkCar(car);
         assertTrue(isCarParked);
     }
 
@@ -42,9 +43,9 @@ public class ParkingLotTest {
         expectedException.expectMessage(ParkingLot.SHOULD_NOT_PARK_SAME_CAR_TWICE);
         ParkingLot parkingLot = new ParkingLot(parkingSize);
         Car carOne = new Car("some id");
-        parkingLot.parkMyCar(carOne);
+        parkingLot.parkCar(carOne);
         Car sameCar = carOne;
-        parkingLot.parkMyCar(sameCar);
+        parkingLot.parkCar(sameCar);
     }
 
     @Test
@@ -52,9 +53,9 @@ public class ParkingLotTest {
 
         Car carToBeParked = new Car("some vehicle id");
         ParkingLot parkingLot = new ParkingLot(parkingSize);
-        parkingLot.parkMyCar(carToBeParked);
-        Car carReturedFromParkingLot = parkingLot.getMyCar(carToBeParked.getVehicleIdentificationNumber());
-        assertEquals(carToBeParked, carReturedFromParkingLot);
+        parkingLot.parkCar(carToBeParked);
+        Car carReturnedFromParkingLot = parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
+        assertEquals(carToBeParked, carReturnedFromParkingLot);
 
     }
 
@@ -64,9 +65,9 @@ public class ParkingLotTest {
         expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
         Car carToBeParked = new Car("some vehicle id");
         ParkingLot parkingLot = new ParkingLot(parkingSize);
-        parkingLot.parkMyCar(carToBeParked);
-        Car carReturnedFromParkingLot = parkingLot.getMyCar(carToBeParked.getVehicleIdentificationNumber());
-        parkingLot.getMyCar(carToBeParked.getVehicleIdentificationNumber());
+        parkingLot.parkCar(carToBeParked);
+        Car carReturnedFromParkingLot = parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
+        parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
     }
 
     @Test
@@ -74,7 +75,7 @@ public class ParkingLotTest {
         expectedException.expect(Exception.class);
         ParkingLot parkingLot = new ParkingLot(parkingSize);
         expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
-        parkingLot.getMyCar("SomeCarThatDoesNotExist");
+        parkingLot.getCarFromParking("SomeCarThatDoesNotExist");
 
     }
 
@@ -86,10 +87,10 @@ public class ParkingLotTest {
         int parkingSize = 1;
         ParkingLot parkinglot = new ParkingLot(parkingSize);
         Car firstCar = new Car("first car id");
-        parkinglot.parkMyCar(firstCar);
+        parkinglot.parkCar(firstCar);
 
         Car secondCar = new Car("second car id");
-        boolean isParked =  parkinglot.parkMyCar(secondCar);
+        boolean isParked =  parkinglot.parkCar(secondCar);
     }
 
     @Test
@@ -98,10 +99,10 @@ public class ParkingLotTest {
         int parkingSize = 1;
         ParkingLot parkinglot = new ParkingLot(parkingSize);
         Car firstCar = new Car("first car id");
-        parkinglot.parkMyCar(firstCar);
-        parkinglot.getMyCar(firstCar.getVehicleIdentificationNumber());
+        parkinglot.parkCar(firstCar);
+        parkinglot.getCarFromParking(firstCar.getVehicleIdentificationNumber());
         Car secondCar = new Car("second car id");
-        boolean isParked =  parkinglot.parkMyCar(secondCar);
+        boolean isParked =  parkinglot.parkCar(secondCar);
         assertThat(isParked, is(true));
     }
 
