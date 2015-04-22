@@ -1,6 +1,7 @@
 package com.bcus.letspark.parking;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,16 +10,27 @@ import java.util.Map;
  */
 public class ParkingLot {
 
-    List<Car> carParkedList = null;
+    protected static final String SHOULD_NOT_PARK_SAME_CAR_TWICE = "Car is already parked in the parking lot." ;
+    public static final String CAR_NOT_PARKED_IN_PARKING_LOT = "Car not parked in the parking lot";
+    Map<String, Car> carParkedMap = null;
 
     public  ParkingLot() {
-        carParkedList = new ArrayList<>();
+        carParkedMap = new HashMap<>();
     }
-    public Integer parkMyCar(Car car) throws Exception {
-        if(carParkedList.contains(car))
-            throw new Exception("Car is already parked in the parking lot.");
+    public boolean parkMyCar(Car car) throws Exception {
+        if(carParkedMap.containsValue(car))
+            throw new Exception(SHOULD_NOT_PARK_SAME_CAR_TWICE);
 
-        carParkedList.add(car);
-        return  5;
+        carParkedMap.put(car.getVehicleIdentificationNumber(), car);
+        return  true;
+    }
+
+    public Car getMyCar(String vehicleIdentificationNumber) throws Exception {
+        if(!carParkedMap.containsKey(vehicleIdentificationNumber)) {
+            throw new Exception(CAR_NOT_PARKED_IN_PARKING_LOT);
+        }
+        Car carToBeReturned = carParkedMap.get(vehicleIdentificationNumber);
+        carParkedMap.remove(vehicleIdentificationNumber);
+        return carToBeReturned;
     }
 }

@@ -8,10 +8,12 @@ import com.bcus.letspark.parking.ParkingLot;
  */
 public class Traveller {
     public static void main(String[] args) throws Exception {
-        Car myCar = new Car("Yadu's Car");
+        Car myCar = new Car("This is my car");
         ParkingLot parkingLot = new ParkingLot();
-        int parkingToken = parkingLot.parkMyCar(myCar);
-        parkingToken = parkingLot.parkMyCar(myCar);
-        System.out.println("I am flying out to my client's site. My car is parked with parking token " + parkingToken);
+        boolean isCarParked = parkingLot.parkMyCar(myCar);
+        System.out.println("I am flying out to my client's site. My car is parked with parking token ");
+        System.out.println("Please get my car");
+        Car carReturned = parkingLot.getMyCar(myCar.getVehicleIdentificationNumber());
+        System.out.println("Driving my returned car.");
     }
 }
