@@ -10,17 +10,17 @@ public class ParkingLotOwner implements Observer {
 
     private final String PARKING_FULL = "PARKING_FULL";
     private final String PARKING_AVAILABLE = "PARKING_AVAILABLE";
-    private boolean isFull;
-    public boolean isParkingFull() {
-        return isFull;
-    }
+    private boolean isParkingFull;
+   /* public boolean isParkingFull() {
+        return isParkingFull;
+    }*/
 
     @Override
     public void update(Observable o, Object parkingState) {
         if(parkingState instanceof String)
         {
             String currentState = (String) parkingState;
-            isFull = currentState.equals(PARKING_FULL);
+            isParkingFull = currentState.equals(PARKING_FULL);
             System.out.println(currentState);
         }
     }

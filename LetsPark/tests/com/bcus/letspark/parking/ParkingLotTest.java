@@ -1,14 +1,27 @@
 package com.bcus.letspark.parking;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import traveller.Car;
 
+import java.util.Observable;
+import java.util.Observer;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class ParkingLotTest {
+
+    ParkingLotOwner parkingLotOwner;
 
     @Rule
     public final ExpectedException expectedException = ExpectedException.none();
@@ -105,5 +118,53 @@ public class ParkingLotTest {
         boolean isParked =  parkinglot.parkCar(secondCar);
         assertThat(isParked, is(true));
     }
+
+    @Test
+    public void notifyOwnerWhenParkingIsFull() throws Exception {
+        int parkingLotSize = 2;
+        ParkingLot parkingLot = new ParkingLot(2);
+        parkingLotOwner = mock(ParkingLotOwner.class);
+        parkingLot.addObserver(parkingLotOwner);
+        Car carOne = new Car("One");
+        Car carTwo = new Car("two");
+        parkingLot.parkCar(carOne);
+        parkingLot.parkCar(carTwo);
+        verify(parkingLotOwner).update((Observable) any(), anyString());
+    }
+
+    @Test
+    public void notifyOwnerWhenParkingIsEmpty() throws Exception {
+        int parkingLotSize = 2;
+        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        parkingLotOwner = mock(ParkingLotOwner.class);
+        parkingLot.addObserver(parkingLotOwner);
+
+        Car carOne = new Car("One");
+        Car carTwo = new Car("two");
+        parkingLot.parkCar(carOne);
+        parkingLot.parkCar(carTwo);
+
+        parkingLot.getCarFromParking(carOne.getVehicleIdentificationNumber());
+        parkingLot.getCarFromParking(carTwo.getVehicleIdentificationNumber());
+        verify(parkingLotOwner,times(2)).update((Observable) any(), anyString());
+
+    }
+
+    @Test
+    public void shouldNotNotifyOwnerWhenParkingIsEmpty() throws Exception {
+        int parkingLotSize = 2;
+        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        parkingLotOwner = mock(ParkingLotOwner.class);
+        parkingLot.addObserver(parkingLotOwner);
+
+        Car carOne = new Car("One");
+        parkingLot.parkCar(carOne);
+
+        parkingLot.getCarFromParking(carOne.getVehicleIdentificationNumber());
+        verify(parkingLotOwner,times(0)).update((Observable) any(), anyString());
+
+    }
+
+    
 
 }
