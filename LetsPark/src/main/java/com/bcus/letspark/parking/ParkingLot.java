@@ -1,6 +1,6 @@
 package com.bcus.letspark.parking;
 
-import traveller.Car;
+import com.bcus.letspark.traveller.Car;
 
 import java.util.*;
 

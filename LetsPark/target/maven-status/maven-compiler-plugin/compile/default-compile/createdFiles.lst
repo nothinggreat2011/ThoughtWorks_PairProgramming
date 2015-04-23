@@ -1,11 +1,11 @@
 com\bcus\letspark\parking\ParkingStrategy.class
+com\bcus\letspark\traveller\Car.class
 com\bcus\letspark\parking\FestiveSeasonStrategy.class
-traveller\Car.class
 com\bcus\letspark\parking\NormalParkingStrategy.class
 com\bcus\letspark\parking\Ticket.class
 com\bcus\letspark\parking\FBIAgent.class
 com\bcus\letspark\parking\ParkingLotOwner.class
-traveller\Traveller.class
+com\bcus\letspark\traveller\Traveller.class
+com\bcus\letspark\traveller\ParkingApplication.class
 com\bcus\letspark\parking\ParkingLotAttendant.class
 com\bcus\letspark\parking\ParkingLot.class
-traveller\ParkingApplication.class
