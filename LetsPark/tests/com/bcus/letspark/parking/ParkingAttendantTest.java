@@ -17,18 +17,6 @@ public class ParkingAttendantTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    @Test
-    public void shouldBeAbleToProvideAFreeParkingLot() throws Exception {
-        List<ParkingLot> parkingLots = new ArrayList<>();
-        int parkingLotSize = 5;
-        ParkingLot parkingLot = new ParkingLot("some parking id", parkingLotSize);
-        parkingLots.add(parkingLot);
-
-        ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
-        ParkingLot parkingLotReturned = parkingLotAttendant.getMeFreeParkingLot();
-        Assert.assertEquals(parkingLot, parkingLotReturned);
-
-    }
 
     @Test
     public void shouldNotBeAbleToHaveAttendantWithNoParkingLots() throws Exception {
@@ -86,42 +74,6 @@ public class ParkingAttendantTest {
         Assert.assertEquals(carReturned, car);
     }
 
-    @Test
-    public void optimizeParkingLotsWhenfestiveSeason() throws Exception {
-        List<ParkingLot> parkingLots = new ArrayList<>();
-        int parkingLotSize = 5;
-        ParkingLot parkingLotA = new ParkingLot("Parking A", 1);
-        ParkingLot parkingLotB = new ParkingLot("Parking B", 2);
-        ParkingLot parkingLotC = new ParkingLot("Parking C", 3);
-
-        parkingLots.add(parkingLotA);
-        parkingLots.add(parkingLotB);
-        parkingLots.add(parkingLotC);
-
-        ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
-        parkingLotAttendant.setParkingStrategy(new FestiveSeasonStrategy());
-        ParkingLot parkingLotReturned = parkingLotAttendant.getMeFreeParkingLot();
-        Assert.assertEquals(parkingLotC, parkingLotReturned);
-    }
-
-    @Test
-    public void shouldReturnSecondMaxParkingLotIfTheParkingLotWithMaxSizeIsFull() throws Exception {
-        List<ParkingLot> parkingLots = new ArrayList<>();
-        int parkingLotSize = 5;
-        ParkingLot parkingLotA = new ParkingLot("Parking A", 1);
-        ParkingLot parkingLotB = new ParkingLot("Parking B", 2);
-        ParkingLot parkingLotC = mock(ParkingLot.class);
-
-        parkingLots.add(parkingLotA);
-        parkingLots.add(parkingLotB);
-        parkingLots.add(parkingLotC);
-
-        when(parkingLotC.isFull()).thenReturn(true);
-        ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
-        parkingLotAttendant.setParkingStrategy(new FestiveSeasonStrategy());
-        ParkingLot parkingLotReturned = parkingLotAttendant.getMeFreeParkingLot();
-        Assert.assertEquals(parkingLotB, parkingLotReturned);
-    }
 
 
 }
