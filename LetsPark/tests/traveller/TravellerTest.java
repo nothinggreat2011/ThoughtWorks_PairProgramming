@@ -38,11 +38,13 @@ public class TravellerTest {
         Assert.assertNotNull(traveller);
     }
 
+
+
     @Test
     public void shouldBeAbleToParkMyCar() throws Exception {
         ParkingLotAttendant parkingLotAttendant = mock(ParkingLotAttendant.class);
         int parkingLotSize = 5;
-        when(parkingLotAttendant.getMeFreeParkingLot()).thenReturn(new ParkingLot(parkingLotSize));
+        when(parkingLotAttendant.getMeFreeParkingLot()).thenReturn(new ParkingLot("some parking lot id", parkingLotSize));
         Traveller traveller = new Traveller(car);
         boolean isCarParked = traveller.parkMyCar(parkingLotAttendant);
         assertThat(isCarParked, is(true));
@@ -78,7 +80,7 @@ public class TravellerTest {
         ParkingLotAttendant parkingLotAttendant = mock(ParkingLotAttendant.class);
 
         when(parkingLot.getCarFromParking(car.getVehicleIdentificationNumber())).thenReturn(null);
-        traveller.getMyCar();
+        traveller.getMyCar(parkingLotAttendant);
     }
 
 }

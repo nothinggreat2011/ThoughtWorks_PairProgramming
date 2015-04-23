@@ -9,8 +9,8 @@ import java.util.List;
 public class ParkingApplication {
     public static void main(String[] args) throws Exception {
 
-        ParkingLot wingAParkingLot = new ParkingLot(2);
-        ParkingLot wingBParkingLot = new ParkingLot(5);
+        ParkingLot wingAParkingLot = new ParkingLot("Wing A",2);
+        ParkingLot wingBParkingLot = new ParkingLot("Wing B", 5);
         List<ParkingLot> parkingLotList = new ArrayList<>();
         parkingLotList.add(wingAParkingLot);
         parkingLotList.add(wingBParkingLot);
@@ -18,6 +18,6 @@ public class ParkingApplication {
         Car travellerCar = new Car("My car");
         Traveller traveller = new Traveller(travellerCar);
         traveller.parkMyCar(parkingLotAttendant);
-        traveller.getMyCar();
+        traveller.getMyCar(parkingLotAttendant);
     }
 }

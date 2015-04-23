@@ -19,28 +19,32 @@ public class ParkingLotTest {
     @Rule
     public final ExpectedException expectedException = ExpectedException.none();
     private final int parkingSize = 2;
+    private String parkingLotId = "Some parking";
 
     @Test
     public void createParkingLot()
     {
-        ParkingLot parkingLot = new ParkingLot(parkingSize);
+
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         assertNotNull(parkingLot);
     }
 
     @Test
-    public void addCarToParkingLotShouldReturnParkingToken() throws Exception {
-        ParkingLot parkingLot = new ParkingLot(parkingSize);
+    public void addCarToParkingLotShouldReturnParkingTicket() throws Exception {
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         Car car = new Car("some id");
-        boolean isCarParked = parkingLot.parkCar(car);
-        assertTrue(isCarParked);
+        Ticket ticket = parkingLot.parkCar(car);
+        assertNotNull(ticket);
     }
+
+
 
 
     @Test
     public void shouldNotParkSameCarTwice() throws Exception {
         expectedException.expect(Exception.class);
         expectedException.expectMessage(ParkingLot.SHOULD_NOT_PARK_SAME_CAR_TWICE);
-        ParkingLot parkingLot = new ParkingLot(parkingSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         Car carOne = new Car("some id");
         parkingLot.parkCar(carOne);
         Car sameCar = carOne;
@@ -51,7 +55,7 @@ public class ParkingLotTest {
     public void getMyCarCorrectly() throws Exception {
 
         Car carToBeParked = new Car("some vehicle id");
-        ParkingLot parkingLot = new ParkingLot(parkingSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         parkingLot.parkCar(carToBeParked);
         Car carReturnedFromParkingLot = parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
         assertEquals(carToBeParked, carReturnedFromParkingLot);
@@ -63,7 +67,7 @@ public class ParkingLotTest {
         expectedException.expect(Exception.class);
         expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
         Car carToBeParked = new Car("some vehicle id");
-        ParkingLot parkingLot = new ParkingLot(parkingSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         parkingLot.parkCar(carToBeParked);
         Car carReturnedFromParkingLot = parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
         parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
@@ -72,7 +76,7 @@ public class ParkingLotTest {
     @Test
     public void shouldNotReturnCarIfNotParked() throws Exception {
         expectedException.expect(Exception.class);
-        ParkingLot parkingLot = new ParkingLot(parkingSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
         parkingLot.getCarFromParking("SomeCarThatDoesNotExist");
 
@@ -84,31 +88,31 @@ public class ParkingLotTest {
         expectedException.expect(Exception.class);
         expectedException.expectMessage(ParkingLot.PARKING_LOT_IS_FULL);
         int parkingSize = 1;
-        ParkingLot parkinglot = new ParkingLot(parkingSize);
+        ParkingLot parkinglot = new ParkingLot(parkingLotId, parkingSize);
         Car firstCar = new Car("first car id");
         parkinglot.parkCar(firstCar);
 
         Car secondCar = new Car("second car id");
-        boolean isParked =  parkinglot.parkCar(secondCar);
+        parkinglot.parkCar(secondCar);
     }
 
     @Test
     public void shouldAbleToParkANewCarWhenCarIsRemovedFromFullParkingLot() throws Exception {
 
         int parkingSize = 1;
-        ParkingLot parkinglot = new ParkingLot(parkingSize);
+        ParkingLot parkinglot = new ParkingLot(parkingLotId, parkingSize);
         Car firstCar = new Car("first car id");
         parkinglot.parkCar(firstCar);
         parkinglot.getCarFromParking(firstCar.getVehicleIdentificationNumber());
         Car secondCar = new Car("second car id");
-        boolean isParked =  parkinglot.parkCar(secondCar);
-        assertThat(isParked, is(true));
+        Ticket ticket =  parkinglot.parkCar(secondCar);
+        assertNotNull(ticket);
     }
 
     @Test
     public void notifyOwnerWhenParkingIsFull() throws Exception {
         int parkingLotSize = 2;
-        ParkingLot parkingLot = new ParkingLot(2);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, 2);
         parkingLotOwner = mock(ParkingLotOwner.class);
         parkingLot.addObserver(parkingLotOwner);
         Car carOne = new Car("One");
@@ -121,7 +125,7 @@ public class ParkingLotTest {
     @Test
     public void notifyOwnerWhenParkingIsEmpty() throws Exception {
         int parkingLotSize = 2;
-        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId,parkingLotSize);
         parkingLotOwner = mock(ParkingLotOwner.class);
         parkingLot.addObserver(parkingLotOwner);
 
@@ -139,7 +143,7 @@ public class ParkingLotTest {
     @Test
     public void shouldNotNotifyOwnerWhenParkingIsEmpty() throws Exception {
         int parkingLotSize = 2;
-        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId,parkingLotSize);
         parkingLotOwner = mock(ParkingLotOwner.class);
         parkingLot.addObserver(parkingLotOwner);
 
@@ -154,7 +158,7 @@ public class ParkingLotTest {
     @Test
     public void shouldBeAbleNotifyFBIAgentWhenParkingIs80PercentFullWhenAddingCar() throws Exception {
         int parkingLotSize = 5;
-        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
 
@@ -172,7 +176,7 @@ public class ParkingLotTest {
     @Test
     public void shouldNotNotifyParkingLotOwnerParkingIs80PercentFullWhenAddingCar() throws Exception {
         int parkingLotSize = 5;
-        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingLotSize);
         ParkingLotOwner parkingLotOwner = mock(ParkingLotOwner.class);
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
@@ -193,7 +197,7 @@ public class ParkingLotTest {
     @Test
     public void shouldBeAbleNotifyFBIAgentWhenParkingIs80PercentFullWhenRemovingCar() throws Exception {
         int parkingLotSize = 5;
-        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingLotSize);
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
 

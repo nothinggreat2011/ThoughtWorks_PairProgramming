@@ -16,16 +16,16 @@ public class ParkingLot extends Observable {
     ArrayList<Observer> fbiAgents =  new ArrayList<>();
     private int parkingSize = 0;
     private boolean isFull;
-    private Integer size;
-
-    public  ParkingLot(int parkingSize) {
+    private String parkingLotId;
+    public  ParkingLot(String parkingLotId, int parkingSize) {
+        this.parkingLotId = parkingLotId;
         carParkedMap = new HashMap<>();
         this.parkingSize = parkingSize;
 
     }
 
 
-    public synchronized boolean parkCar(Car car) throws Exception {
+    public synchronized Ticket parkCar(Car car) throws Exception {
         if(isFull()) {
             throw new Exception(PARKING_LOT_IS_FULL);
         }
@@ -33,8 +33,8 @@ public class ParkingLot extends Observable {
             throw new Exception(SHOULD_NOT_PARK_SAME_CAR_TWICE);
         carParkedMap.put(car.getVehicleIdentificationNumber(), car);
         notifyParkingLotObservers();
-
-        return  true;
+        Ticket ticket = new Ticket(this.parkingLotId,car.getVehicleIdentificationNumber());
+        return  ticket;
     }
 
     public synchronized Car getCarFromParking(String vehicleIdentificationNumber) throws Exception {
@@ -104,5 +104,14 @@ public class ParkingLot extends Observable {
 
     private double calculatePercentageFull(){
         return (carParkedMap.size() * 100.0 )/parkingSize;
+    }
+
+    public String getParkingLotId() {
+        return parkingLotId;
+    }
+
+
+    public Integer getParkingSize() {
+        return parkingSize;
     }
 }
