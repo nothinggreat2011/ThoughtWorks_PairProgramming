@@ -2,10 +2,7 @@ package com.bcus.letspark.parking;
 
 import traveller.Car;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 
 public class ParkingLot extends Observable {
@@ -14,12 +11,18 @@ public class ParkingLot extends Observable {
     public static final String CAR_NOT_PARKED_IN_PARKING_LOT = "Car not parked in the parking lot";
     public static final String PARKING_LOT_IS_FULL = "Parking lot is full";
     private Map<String, Car> carParkedMap = null;
-    private int availableParkingCounter = 0;
+    boolean notifyForAvailable = false;
+
+    ArrayList<Observer> owners =  new ArrayList<>();
+    ArrayList<Observer> fbiAgents =  new ArrayList<>();
+    private int parkingSize = 0;
     private boolean isFull;
+    private Integer size;
 
     public  ParkingLot(int parkingSize) {
         carParkedMap = new HashMap<>();
-        availableParkingCounter = parkingSize;
+        this.parkingSize = parkingSize;
+
     }
 
 
@@ -30,12 +33,7 @@ public class ParkingLot extends Observable {
         if(carParkedMap.containsValue(car))
             throw new Exception(SHOULD_NOT_PARK_SAME_CAR_TWICE);
         carParkedMap.put(car.getVehicleIdentificationNumber(), car);
-        availableParkingCounter--;
-        if(isFull())
-        {
-            setChanged();
-            notifyObservers("PARKING_FULL");
-        }
+        notifyParkingLotObservers();
 
         return  true;
     }
@@ -45,23 +43,67 @@ public class ParkingLot extends Observable {
             throw new Exception(CAR_NOT_PARKED_IN_PARKING_LOT);
         }
         Car carToBeReturned = carParkedMap.get(vehicleIdentificationNumber);
-        carParkedMap.remove(vehicleIdentificationNumber);
-        availableParkingCounter++;
-        if(!isFull())
+
+        if(isFull())
         {
-            if(availableParkingCounter == 1)
-            {
-                setChanged();
-                notifyObservers("PARKING_AVAILABLE");
-
-            }
+            notifyForAvailable = true;
+            notifyParkingLotObservers();
+            notifyForAvailable = false;
         }
-
+        carParkedMap.remove(vehicleIdentificationNumber);
         return carToBeReturned;
     }
 
     private boolean isFull() {
-        return availableParkingCounter == 0;
+        return (parkingSize - carParkedMap.size())== 0;
     }
 
+    public boolean verify80PercentFull() {
+        double percentFull = calcualtePercentageFull();
+        return percentFull == 80;
+    }
+
+    public void notifyParkingLotObservers() {
+        if(isFull())
+        {
+            notifyOwners("PARKING_FULL");
+        }
+        else if(notifyForAvailable)
+        {
+            notifyOwners("PARKING_AVAILABLE");
+        }
+
+        if(verify80PercentFull())
+        {
+            for(Observer observer : fbiAgents)
+            {
+                observer.update(this, "PARKING_EIGHTY_PERCENT_FULL");
+            }
+        }
+
+    }
+
+    private void notifyOwners(String message)
+    {
+        for(Observer parkingLotOwner : owners)
+        {
+            parkingLotOwner.update(this, message);
+        }
+    }
+
+    @Override
+    public synchronized void addObserver(Observer observer) {
+
+        if(observer instanceof ParkingLotOwner){
+            owners.add(observer);
+            return;
+        }
+        fbiAgents.add(observer);
+    }
+
+
+
+    private double calcualtePercentageFull(){
+        return (carParkedMap.size() * 100.0 )/parkingSize;
+    }
 }

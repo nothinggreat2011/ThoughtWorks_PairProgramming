@@ -1,23 +1,19 @@
 package com.bcus.letspark.parking;
 
-import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
 import traveller.Car;
 
 import java.util.Observable;
-import java.util.Observer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class ParkingLotTest {
 
@@ -42,13 +38,6 @@ public class ParkingLotTest {
         assertTrue(isCarParked);
     }
 
-    @Test
-    public void parkingTokenShouldNotBeLessThanOne() throws Exception {
-        ParkingLot parkingLot = new ParkingLot(parkingSize);
-        Car car = new Car("some id");
-        boolean isCarParked = parkingLot.parkCar(car);
-        assertTrue(isCarParked);
-    }
 
     @Test
     public void shouldNotParkSameCarTwice() throws Exception {
@@ -129,7 +118,7 @@ public class ParkingLotTest {
         Car carTwo = new Car("two");
         parkingLot.parkCar(carOne);
         parkingLot.parkCar(carTwo);
-        verify(parkingLotOwner).update((Observable) any(), anyString());
+        verify(parkingLotOwner,times(1)).update(parkingLot, "PARKING_FULL");
     }
 
     @Test
@@ -161,10 +150,54 @@ public class ParkingLotTest {
         parkingLot.parkCar(carOne);
 
         parkingLot.getCarFromParking(carOne.getVehicleIdentificationNumber());
-        verify(parkingLotOwner,times(0)).update((Observable) any(), anyString());
+        verify(parkingLotOwner,never()).update((Observable) any(), anyString());
 
     }
+    @Test
+    public void ShouldBeAbleToValidateWhenGarageIs80PercentFull() throws Exception {
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        Car carOne = new Car("One");
+        Car carTwo = new Car("Two");
+        Car carThree = new Car("Three");
+        Car carFour = new Car("Four");
+        parkingLot.parkCar(carOne);
+        parkingLot.parkCar(carTwo);
+        parkingLot.parkCar(carThree);
+        parkingLot.parkCar(carFour);
+        Assert.assertTrue(parkingLot.verify80PercentFull());
+    }
 
-    
+    @Test
+    public void ShouldBeAbleToValidateWhenGarageIsNot80PercentFull() throws Exception {
+        int parkingLotSize = 4;
+        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        Car carOne = new Car("One");
+        Car carTwo = new Car("Two");
+        parkingLot.parkCar(carOne);
+        parkingLot.parkCar(carTwo);
+
+        Assert.assertFalse(parkingLot.verify80PercentFull());
+    }
+
+    @Test
+    public void shouldBeAbleNotifyFBIAgentWhenParkingIs80PercentFull() throws Exception {
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        FBIAgent fbiAgent = mock(FBIAgent.class);
+        parkingLot.addObserver((fbiAgent));
+
+        Car carOne = new Car("One");
+        Car carTwo = new Car("Two");
+        Car carThree = new Car("Three");
+        Car carFour = new Car("Four");
+        parkingLot.parkCar(carOne);
+        parkingLot.parkCar(carTwo);
+        parkingLot.parkCar(carThree);
+        parkingLot.parkCar(carFour);
+        verify(fbiAgent,times(1)).update(parkingLot, "PARKING_EIGHTY_PERCENT_FULL");
+    }
+
+
 
 }

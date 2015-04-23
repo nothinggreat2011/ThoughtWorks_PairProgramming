@@ -13,9 +13,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by sawai on 4/22/2015.
- */
 public class TravellerTest {
 
 
@@ -57,4 +54,15 @@ public class TravellerTest {
         boolean isCarParked = traveller.parkMyCar(parkingLot);
         assertThat(isCarParked, is(false));
     }
+
+    @Test
+    public void testGetMyCarAfterParkingIt() throws Exception {
+        Traveller traveller = new Traveller();
+        ParkingLot parkingLot = mock(ParkingLot.class);
+        traveller.parkMyCar(parkingLot);
+
+        boolean wasCarReturnedFromParking = traveller.getMyCar();
+        assertThat(wasCarReturnedFromParking, is(true));
+    }
+
 }
