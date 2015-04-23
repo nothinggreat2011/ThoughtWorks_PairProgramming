@@ -1,6 +1,5 @@
 package com.bcus.letspark.parking;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -11,8 +10,6 @@ import java.util.Observable;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class ParkingLotTest {
@@ -153,35 +150,9 @@ public class ParkingLotTest {
         verify(parkingLotOwner,never()).update((Observable) any(), anyString());
 
     }
-    @Test
-    public void ShouldBeAbleToValidateWhenGarageIs80PercentFull() throws Exception {
-        int parkingLotSize = 5;
-        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
-        Car carOne = new Car("One");
-        Car carTwo = new Car("Two");
-        Car carThree = new Car("Three");
-        Car carFour = new Car("Four");
-        parkingLot.parkCar(carOne);
-        parkingLot.parkCar(carTwo);
-        parkingLot.parkCar(carThree);
-        parkingLot.parkCar(carFour);
-        Assert.assertTrue(parkingLot.verify80PercentFull());
-    }
 
     @Test
-    public void ShouldBeAbleToValidateWhenGarageIsNot80PercentFull() throws Exception {
-        int parkingLotSize = 4;
-        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
-        Car carOne = new Car("One");
-        Car carTwo = new Car("Two");
-        parkingLot.parkCar(carOne);
-        parkingLot.parkCar(carTwo);
-
-        Assert.assertFalse(parkingLot.verify80PercentFull());
-    }
-
-    @Test
-    public void shouldBeAbleNotifyFBIAgentWhenParkingIs80PercentFull() throws Exception {
+    public void shouldBeAbleNotifyFBIAgentWhenParkingIs80PercentFullWhenAddingCar() throws Exception {
         int parkingLotSize = 5;
         ParkingLot parkingLot = new ParkingLot(parkingLotSize);
         FBIAgent fbiAgent = mock(FBIAgent.class);
@@ -197,6 +168,49 @@ public class ParkingLotTest {
         parkingLot.parkCar(carFour);
         verify(fbiAgent,times(1)).update(parkingLot, "PARKING_EIGHTY_PERCENT_FULL");
     }
+
+    @Test
+    public void shouldNotNotifyParkingLotOwnerParkingIs80PercentFullWhenAddingCar() throws Exception {
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        ParkingLotOwner parkingLotOwner = mock(ParkingLotOwner.class);
+        FBIAgent fbiAgent = mock(FBIAgent.class);
+        parkingLot.addObserver((fbiAgent));
+        parkingLot.addObserver(parkingLotOwner);
+
+        Car carOne = new Car("One");
+        Car carTwo = new Car("Two");
+        Car carThree = new Car("Three");
+        Car carFour = new Car("Four");
+        parkingLot.parkCar(carOne);
+        parkingLot.parkCar(carTwo);
+        parkingLot.parkCar(carThree);
+        parkingLot.parkCar(carFour);
+        verify(parkingLotOwner,never()).update(any(ParkingLot.class), anyString());
+
+    }
+
+    @Test
+    public void shouldBeAbleNotifyFBIAgentWhenParkingIs80PercentFullWhenRemovingCar() throws Exception {
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+        FBIAgent fbiAgent = mock(FBIAgent.class);
+        parkingLot.addObserver((fbiAgent));
+
+        Car carOne = new Car("One");
+        Car carTwo = new Car("Two");
+        Car carThree = new Car("Three");
+        Car carFour = new Car("Four");
+        Car carFive = new Car("Five");
+        parkingLot.parkCar(carOne);
+        parkingLot.parkCar(carTwo);
+        parkingLot.parkCar(carThree);
+        parkingLot.parkCar(carFour);
+        parkingLot.parkCar(carFive);
+        parkingLot.getCarFromParking(carFive.getVehicleIdentificationNumber());
+        verify(fbiAgent,times(2)).update(parkingLot, "PARKING_EIGHTY_PERCENT_FULL");
+    }
+
 
 
 

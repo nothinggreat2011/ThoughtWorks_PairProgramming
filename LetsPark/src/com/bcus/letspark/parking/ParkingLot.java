@@ -48,19 +48,20 @@ public class ParkingLot extends Observable {
             notifyOwners("PARKING_AVAILABLE");
         }
         carParkedMap.remove(vehicleIdentificationNumber);
+        notifyParkingLotObservers();
         return carToBeReturned;
     }
 
-    private boolean isFull() {
+    public boolean isFull() {
         return (parkingSize - carParkedMap.size())== 0;
     }
 
-    public boolean verify80PercentFull() {
-        double percentFull = calcualtePercentageFull();
+    private boolean verify80PercentFull() {
+        double percentFull = calculatePercentageFull();
         return percentFull == 80;
     }
 
-    public void notifyParkingLotObservers() {
+    private void notifyParkingLotObservers() {
         if(isFull())
         {
             notifyOwners("PARKING_FULL");
@@ -68,12 +69,17 @@ public class ParkingLot extends Observable {
 
         if(verify80PercentFull())
         {
-            for(Observer observer : fbiAgents)
-            {
-                observer.update(this, "PARKING_EIGHTY_PERCENT_FULL");
-            }
+            notifyFBIAgent("PARKING_EIGHTY_PERCENT_FULL");
         }
 
+    }
+
+    private void notifyFBIAgent(String message)
+    {
+        for(Observer observer : fbiAgents)
+        {
+            observer.update(this, message);
+        }
     }
 
     private void notifyOwners(String message)
@@ -96,7 +102,7 @@ public class ParkingLot extends Observable {
 
 
 
-    private double calcualtePercentageFull(){
+    private double calculatePercentageFull(){
         return (carParkedMap.size() * 100.0 )/parkingSize;
     }
 }
