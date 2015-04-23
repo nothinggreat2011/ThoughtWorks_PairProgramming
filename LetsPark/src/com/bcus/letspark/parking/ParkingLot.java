@@ -11,7 +11,6 @@ public class ParkingLot extends Observable {
     public static final String CAR_NOT_PARKED_IN_PARKING_LOT = "Car not parked in the parking lot";
     public static final String PARKING_LOT_IS_FULL = "Parking lot is full";
     private Map<String, Car> carParkedMap = null;
-    boolean notifyForAvailable = false;
 
     ArrayList<Observer> owners =  new ArrayList<>();
     ArrayList<Observer> fbiAgents =  new ArrayList<>();
@@ -46,9 +45,7 @@ public class ParkingLot extends Observable {
 
         if(isFull())
         {
-            notifyForAvailable = true;
-            notifyParkingLotObservers();
-            notifyForAvailable = false;
+            notifyOwners("PARKING_AVAILABLE");
         }
         carParkedMap.remove(vehicleIdentificationNumber);
         return carToBeReturned;
@@ -67,10 +64,6 @@ public class ParkingLot extends Observable {
         if(isFull())
         {
             notifyOwners("PARKING_FULL");
-        }
-        else if(notifyForAvailable)
-        {
-            notifyOwners("PARKING_AVAILABLE");
         }
 
         if(verify80PercentFull())
