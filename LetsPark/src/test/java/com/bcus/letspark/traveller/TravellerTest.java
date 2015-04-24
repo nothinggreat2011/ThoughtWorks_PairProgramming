@@ -44,7 +44,7 @@ public class TravellerTest {
     public void shouldBeAbleToParkMyCar() throws Exception {
         ParkingLotAttendant parkingLotAttendant = mock(ParkingLotAttendant.class);
         int parkingLotSize = 5;
-        when(parkingLotAttendant.getMeFreeParkingLot()).thenReturn(new ParkingLot("some parking lot id", parkingLotSize));
+        when(parkingLotAttendant.getMeFreeParkingLot(car)).thenReturn(new ParkingLot("some parking lot id", parkingLotSize));
         Traveller traveller = new Traveller(car);
         boolean isCarParked = traveller.parkMyCar(parkingLotAttendant);
         assertThat(isCarParked, is(true));

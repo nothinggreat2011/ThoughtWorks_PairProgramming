@@ -3,6 +3,7 @@ package com.bcus.letspark.parking;
 import com.bcus.letspark.strategy.NormalParkingStrategy;
 import com.bcus.letspark.strategy.ParkingStrategy;
 import com.bcus.letspark.traveller.Car;
+import com.bcus.letspark.traveller.CarSize;
 
 import java.util.List;
 
@@ -23,9 +24,9 @@ public class ParkingLotAttendant {
 
     List<ParkingLot> parkingLots = null;
 
-    public ParkingLot getMeFreeParkingLot() {
+    public ParkingLot getMeFreeParkingLot(Car car) {
 
-        return parkingStrategy.findParkingLot(parkingLots);
+        return parkingStrategy.findParkingLot(parkingLots, car.getSize());
     }
 
     public Car unparkCar(Ticket parkingTicket) throws Exception {
@@ -49,7 +50,7 @@ public class ParkingLotAttendant {
 
     public Ticket parkCar(Car car) throws Exception {
 
-        ParkingLot parkingLot = getMeFreeParkingLot();
+        ParkingLot parkingLot = getMeFreeParkingLot(car);
         return parkingLot.parkCar(car);
 
     }

@@ -36,11 +36,11 @@ public class ParkingAttendantTest {
         ParkingLot parkingLot = mock(ParkingLot.class);
         when(parkingLot.isFull()).thenReturn(true);
         parkingLots.add(parkingLot);
-
+        Car car = new Car(CarSize.SMALL, "some car id");
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
 
 
-        ParkingLot parkingLotReturned = parkingLotAttendant.getMeFreeParkingLot();
+        ParkingLot parkingLotReturned = parkingLotAttendant.getMeFreeParkingLot(car);
         Assert.assertNull(parkingLotReturned);
 
     }
@@ -52,11 +52,12 @@ public class ParkingAttendantTest {
         ParkingLot parkingLot = mock(ParkingLot.class);
         when(parkingLot.isFull()).thenReturn(true);
         parkingLots.add(parkingLot);
+        Car car = new Car(CarSize.SMALL, "some car id");
 
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
 
 
-        ParkingLot parkingLotReturned = parkingLotAttendant.getMeFreeParkingLot();
+        ParkingLot parkingLotReturned = parkingLotAttendant.getMeFreeParkingLot(car);
         Assert.assertNull(parkingLotReturned);
 
     }
