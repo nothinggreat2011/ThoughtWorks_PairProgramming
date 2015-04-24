@@ -49,7 +49,7 @@ public class ParkingLot extends Observable {
             notifyFBIAgent(PARKING_MORE_THAN_EIGHTY_PERCENT_FULL);
 
         notifyParkingLotObservers();
-        Ticket ticket = new Ticket(this.parkingLotId, car.getVehicleIdentificationNumber());
+        Ticket ticket = new Ticket(this.parkingLotId, car.getVehicleIdentificationNumber(), new Date());
         return ticket;
     }
 

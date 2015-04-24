@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import com.bcus.letspark.traveller.Car;
 
+import java.util.Date;
 import java.util.Observable;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -327,4 +328,16 @@ public class ParkingLotTest {
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
         verify(policeDepartment,never()).update(any(ParkingLot.class), anyString());
     }
+
+    @Test
+    public void shouldBeAbleToVerifyTheTicketTime() throws Exception {
+        int parkingLotSize = 6;
+        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
+        Car car = new Car("Red",CarSize.SMALL,"car");
+        long currentTime = System.currentTimeMillis();
+        Ticket ticket = parkingLot.parkCar(car);
+        assertTrue(ticket.getParkingTime().getTime() >= currentTime);
+    }
+
+
 }
