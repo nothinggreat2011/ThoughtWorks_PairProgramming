@@ -176,8 +176,8 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void shouldBeAbleNotifyFBIAgentWhenParkingIsMoreThan80PercentFullWhenAddingCar() throws Exception {
-        int parkingLotSize = 5;
+    public void shouldBeAbleToNotifyFBIAgentWhenParkingLotSizeIsNoLonger80Percent() throws Exception {
+        int parkingLotSize = 6;
         ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
@@ -187,36 +187,24 @@ public class ParkingLotTest {
         Car carThree = new Car("Three");
         Car carFour = new Car("Four");
         Car carFive = new Car("Five");
+        Car carSix = new Car("Six");
 
         parkingLot.parkCar(carOne);
         parkingLot.parkCar(carTwo);
         parkingLot.parkCar(carThree);
-        parkingLot.parkCar(carFour);
-        parkingLot.parkCar(carFive);
-        verify(fbiAgent,times(1)).update(parkingLot, "PARKING_EIGHTY_PERCENT_FULL");
+        Ticket ticketOne = parkingLot.parkCar(carFour);
+        Ticket ticketTwo = parkingLot.parkCar(carFive);
+        Ticket ticketThree = parkingLot.parkCar(carSix);
+        parkingLot.getCarFromParking(ticketOne.getVehicleIdentificationNumber());
+        parkingLot.getCarFromParking(ticketTwo.getVehicleIdentificationNumber());
+        parkingLot.getCarFromParking(ticketThree.getVehicleIdentificationNumber());
+
+
         verify(fbiAgent,times(1)).update(parkingLot, "PARKING_MORE_THAN_EIGHTY_PERCENT_FULL");
-    }
-
-    @Test
-    public void shouldBeAbleNotifyFBIAgentWhenParkingIsLessThan80PercentFullWhenAddingCar() throws Exception {
-        int parkingLotSize = 5;
-        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
-        FBIAgent fbiAgent = mock(FBIAgent.class);
-        parkingLot.addObserver((fbiAgent));
-
-        Car carOne = new Car("One");
-        Car carTwo = new Car("Two");
-        Car carThree = new Car("Three");
-        Car carFour = new Car("Four");
-
-        parkingLot.parkCar(carOne);
-        parkingLot.parkCar(carTwo);
-        parkingLot.parkCar(carThree);
-        Ticket ticket = parkingLot.parkCar(carFour);
-        parkingLot.getCarFromParking(ticket.getVehicleIdentificationNumber());
-        verify(fbiAgent,times(1)).update(parkingLot, "PARKING_EIGHTY_PERCENT_FULL");
         verify(fbiAgent,times(1)).update(parkingLot, "PARKING_LESS_THAN_EIGHTY_PERCENT_FULL");
     }
+
+
 
     @Test
     public void shouldNotNotifyParkingLotOwnerParkingIs80PercentFullWhenAddingCar() throws Exception {
