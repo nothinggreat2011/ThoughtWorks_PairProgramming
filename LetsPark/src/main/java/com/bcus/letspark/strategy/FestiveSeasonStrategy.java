@@ -1,6 +1,7 @@
 package com.bcus.letspark.strategy;
 
 import com.bcus.letspark.parking.ParkingLot;
+import com.bcus.letspark.traveller.CarSize;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public class FestiveSeasonStrategy implements ParkingStrategy {
     @Override
-    public ParkingLot findParkingLot(List<ParkingLot> parkingLots) {
+    public ParkingLot findParkingLot(List<ParkingLot> parkingLots, CarSize carSize) {
         ParkingLot parkingLotWithMaxSize = null;
         for (ParkingLot parkingLot : parkingLots) {
             if (!parkingLot.isFull()) {

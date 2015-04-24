@@ -26,11 +26,7 @@ public class Traveller {
         {
             throw new Exception(NO_PARKING_ATTENDANT_ASSIGNED);
         }
-        ParkingLot parkingLot = parkingLotAttendant.getMeFreeParkingLot();
-        if(parkingLot == null) {
-            throw new Exception(NO_PARKING_LOT_SPECIFIED_TO_PARK_CAR);
-        }
-        ticket = parkingLot.parkCar(myCar);
+        ticket = parkingLotAttendant.parkCar(myCar);
         System.out.println("I am flying out to my client's site. My car is parked. ");
 
         return true;

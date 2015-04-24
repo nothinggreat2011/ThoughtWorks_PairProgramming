@@ -15,7 +15,7 @@ public class ParkingApplication {
         parkingLotList.add(wingAParkingLot);
         parkingLotList.add(wingBParkingLot);
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLotList);
-        Car travellerCar = new Car("My car");
+        Car travellerCar = new Car(CarSize.SMALL,"My car");
         Traveller traveller = new Traveller(travellerCar);
         traveller.parkMyCar(parkingLotAttendant);
         traveller.getMyCar(parkingLotAttendant);

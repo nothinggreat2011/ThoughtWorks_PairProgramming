@@ -22,7 +22,7 @@ public class TravellerTest {
     @Before
     public void setUp() throws Exception {
         parkingLot = mock(ParkingLot.class);
-        car = new Car("My car");
+        car = new Car(CarSize.SMALL,"My car");
 
     }
 
@@ -33,7 +33,7 @@ public class TravellerTest {
     @Test
     public void createTravelerWithANewCar()
     {
-        Car travellerCar = new Car("My car");
+        Car travellerCar = new Car(CarSize.SMALL,"My car");
         Traveller traveller = new Traveller(travellerCar);
         Assert.assertNotNull(traveller);
     }
@@ -58,20 +58,6 @@ public class TravellerTest {
         boolean isCarParked = traveller.parkMyCar(null);
         assertThat(isCarParked, is(true));
     }
-
-    @Test
-    public void shouldNotBeAbleToParkMyCarWhenThereIsNoParkingLot() throws Exception {
-        expectedException.expect(Exception.class);
-        expectedException.expectMessage(Traveller.NO_PARKING_LOT_SPECIFIED_TO_PARK_CAR);
-
-        ParkingLotAttendant parkingLotAttendant = mock(ParkingLotAttendant.class);
-        when(parkingLotAttendant.getMeFreeParkingLot()).thenReturn(null);
-        Traveller traveller = new Traveller(car);
-        boolean isCarParked = traveller.parkMyCar(parkingLotAttendant);
-        assertThat(isCarParked, is(true));
-    }
-
-
     @Test
     public void shouldNotBeAbleToUnParkCarWithoutParking() throws Exception {
         expectedException.expect(Exception.class);

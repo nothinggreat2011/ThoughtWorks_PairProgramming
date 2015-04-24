@@ -47,4 +47,10 @@ public class ParkingLotAttendant {
         this.parkingStrategy = strategy;
     }
 
+    public Ticket parkCar(Car car) throws Exception {
+
+        ParkingLot parkingLot = getMeFreeParkingLot();
+        return parkingLot.parkCar(car);
+
+    }
 }
