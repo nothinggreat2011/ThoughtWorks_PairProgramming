@@ -27,4 +27,15 @@ public class PoliceDepartment implements Observer{
         }
        return carList;
     }
+
+    public List<Car> findAllCarsHavingPartialLicensePlate(List<Car> parkedCar) {
+
+        List<Car> partialLicensePlateCarList = new ArrayList<>();
+        for (Car car : parkedCar) {
+            if(car.getVehicleIdentificationNumber().length() <4){
+                partialLicensePlateCarList.add(car);
+            }
+        }
+        return partialLicensePlateCarList;
+    }
 }

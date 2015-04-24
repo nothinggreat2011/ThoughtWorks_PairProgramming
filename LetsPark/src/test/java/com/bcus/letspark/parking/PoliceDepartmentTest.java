@@ -29,9 +29,9 @@ public class PoliceDepartmentTest {
         parkingLot = mock(ParkingLot.class);
         policeDepartment = new PoliceDepartment();
         parkedCar = new ArrayList<>();
-        carOne = new Car("Red", CarSize.BIG, "Car One");
-        carTwo = new Car("Red", CarSize.BIG, "Car One");
-        carThree = new Car("Red", CarSize.BIG, "Car One");
+        carOne = new Car("Red", CarSize.BIG, "Car");
+        carTwo = new Car("Red", CarSize.BIG, "Car");
+        carThree = new Car("Red", CarSize.BIG, "Car");
         parkedCar.add(carOne);
         parkedCar.add(carTwo);
         parkedCar.add(carThree);
