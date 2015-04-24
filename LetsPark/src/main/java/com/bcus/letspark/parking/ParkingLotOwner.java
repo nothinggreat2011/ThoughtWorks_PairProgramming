@@ -8,9 +8,6 @@ public class ParkingLotOwner implements Observer {
     private final String PARKING_FULL = "PARKING_FULL";
     private final String PARKING_AVAILABLE = "PARKING_AVAILABLE";
     private boolean isParkingFull;
-   /* public boolean isParkingFull() {
-        return isParkingFull;
-    }*/
 
     @Override
     public void update(Observable o, Object parkingState) {
