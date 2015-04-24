@@ -39,6 +39,7 @@ public class ParkingLot extends Observable {
 
     public synchronized Car getCarFromParking(String vehicleIdentificationNumber) throws Exception {
         if(!carParkedMap.containsKey(vehicleIdentificationNumber)) {
+            notifyFBIAgent("CAR_NOT_FOUND_IN_PARKING_LOT");
             throw new Exception(CAR_NOT_PARKED_IN_PARKING_LOT);
         }
         Car carToBeReturned = carParkedMap.get(vehicleIdentificationNumber);

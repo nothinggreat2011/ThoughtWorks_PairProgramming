@@ -214,8 +214,45 @@ public class ParkingLotTest {
         parkingLot.getCarFromParking(carFive.getVehicleIdentificationNumber());
         verify(fbiAgent,times(2)).update(parkingLot, "PARKING_EIGHTY_PERCENT_FULL");
     }
+    @Test
+    public void shouldBeAbleNotifyFBIAgentWhenCarIsNotPresentWhileUnparking() throws Exception {
+        expectedException.expect(Exception.class);
+        expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
+        FBIAgent fbiAgent = mock(FBIAgent.class);
+        parkingLot.addObserver((fbiAgent));
+        parkingLot.getCarFromParking("invalidNoNotPresent");
+        verify(fbiAgent,times(1)).update(parkingLot, "CAR_NOT_FOUND_IN_PARKING_LOT");
+    }
 
+    @Test
+    public void shouldBeAbleNotifyFBIAgentWhenACarIsUnparkedTwiceFromTheParkingLot() throws Exception {
+        expectedException.expect(Exception.class);
+        expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
+        FBIAgent fbiAgent = mock(FBIAgent.class);
+        parkingLot.addObserver((fbiAgent));
 
+        Car car = new Car("car vehicle id");
+        parkingLot.parkCar(car);
+        parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
+        parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
+        verify(fbiAgent,times(1)).update(parkingLot, "CAR_NOT_FOUND_IN_PARKING_LOT");
+    }
 
+    @Test
+    public void shouldNotNotifyFBIAgentWhenAParkedCarIsUnparkedFromTheParkingLot() throws Exception {
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
+        FBIAgent fbiAgent = mock(FBIAgent.class);
+        parkingLot.addObserver((fbiAgent));
+
+        Car car = new Car("car vehicle id");
+        parkingLot.parkCar(car);
+        parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
+        verify(fbiAgent,never()).update(any(ParkingLot.class), anyString());
+    }
 
 }
