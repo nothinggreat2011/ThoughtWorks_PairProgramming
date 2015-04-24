@@ -49,7 +49,7 @@ public class PoliceDepartmentTest {
     public void shouldBeAbleToFindAllCarsHavingPartialLicensePlate() {
 
         when(parkingLot.getParkedCars()).thenReturn(parkedCar);
-        List<Car> carList = policeDepartment.findAllCarsHavingSameColor(parkedCar, "Red");
+        List<Car> carList = policeDepartment.findAllCarsHavingPartialLicensePlate(parkedCar);
         assertSame(3, carList.size());
     }
 
