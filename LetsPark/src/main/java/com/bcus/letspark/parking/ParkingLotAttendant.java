@@ -1,5 +1,7 @@
 package com.bcus.letspark.parking;
 
+import com.bcus.letspark.strategy.NormalParkingStrategy;
+import com.bcus.letspark.strategy.ParkingStrategy;
 import com.bcus.letspark.traveller.Car;
 
 import java.util.List;
@@ -10,6 +12,7 @@ public class ParkingLotAttendant {
     private static final String EMPTY_TICKET_PROVIDED = "No ticket is provided toun park the car.";
     private ParkingStrategy parkingStrategy;
     public ParkingLotAttendant(List<ParkingLot> parkingLots) throws Exception {
+
         if(parkingLots == null || parkingLots.isEmpty()){
             throw  new Exception(CAN_NOT_CREATE_ATTENDANT);
         }

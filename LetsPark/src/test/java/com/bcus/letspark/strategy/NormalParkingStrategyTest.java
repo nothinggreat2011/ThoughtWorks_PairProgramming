@@ -1,5 +1,7 @@
-package com.bcus.letspark.parking;
+package com.bcus.letspark.strategy;
 
+import com.bcus.letspark.parking.ParkingLot;
+import com.bcus.letspark.parking.ParkingLotAttendant;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.Test;

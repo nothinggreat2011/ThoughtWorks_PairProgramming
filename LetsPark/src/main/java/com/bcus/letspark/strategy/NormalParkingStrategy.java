@@ -1,4 +1,6 @@
-package com.bcus.letspark.parking;
+package com.bcus.letspark.strategy;
+
+import com.bcus.letspark.parking.ParkingLot;
 
 import java.util.List;
 
