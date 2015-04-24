@@ -21,7 +21,7 @@ public class ParkingAttendantTest {
     @Test
     public void shouldNotBeAbleToHaveAttendantWithNoParkingLots() throws Exception {
         expectedException.expect(Exception.class);
-        expectedException.expectMessage(ParkingLotAttendant.CAN_NOT_CREATE_ATTENDANT);
+        expectedException.expectMessage(ParkingLotAttendant.PARKING_LOT_IS_EMPTY);
         List<ParkingLot> parkingLots = null;
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
     }

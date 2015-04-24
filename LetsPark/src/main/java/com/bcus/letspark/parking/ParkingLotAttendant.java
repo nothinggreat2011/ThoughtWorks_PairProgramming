@@ -1,5 +1,6 @@
 package com.bcus.letspark.parking;
 
+import com.bcus.letspark.exceptions.EmptyInputException;
 import com.bcus.letspark.strategy.NormalParkingStrategy;
 import com.bcus.letspark.strategy.ParkingStrategy;
 import com.bcus.letspark.traveller.Car;
@@ -8,13 +9,13 @@ import java.util.List;
 
 
 public class ParkingLotAttendant {
-    public static final String CAN_NOT_CREATE_ATTENDANT = "Parking Lot Required";
+    public static final String PARKING_LOT_IS_EMPTY = "Parking Lot Required";
     private static final String EMPTY_TICKET_PROVIDED = "No ticket is provided toun park the car.";
     private ParkingStrategy parkingStrategy;
     public ParkingLotAttendant(List<ParkingLot> parkingLots) throws Exception {
 
         if(parkingLots == null || parkingLots.isEmpty()){
-            throw  new Exception(CAN_NOT_CREATE_ATTENDANT);
+            throw  new EmptyInputException(PARKING_LOT_IS_EMPTY);
         }
         this.parkingLots = parkingLots;
         this.parkingStrategy = new NormalParkingStrategy();
@@ -32,7 +33,7 @@ public class ParkingLotAttendant {
 
         if(parkingTicket == null)
         {
-            throw new Exception(EMPTY_TICKET_PROVIDED);
+            throw new EmptyInputException(EMPTY_TICKET_PROVIDED);
         }
         for(ParkingLot parkingLot : parkingLots)
         {

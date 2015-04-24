@@ -1,5 +1,8 @@
 package com.bcus.letspark.parking;
 
+import com.bcus.letspark.exceptions.CarNotParkedException;
+import com.bcus.letspark.exceptions.ParkingLotFullException;
+import com.bcus.letspark.exceptions.ShouldNotParkSameCarException;
 import com.bcus.letspark.traveller.Car;
 
 import java.util.*;
@@ -35,10 +38,10 @@ public class ParkingLot extends Observable {
     public synchronized Ticket parkCar(Car car) throws Exception {
 
         if (isFull()) {
-            throw new Exception(PARKING_LOT_IS_FULL);
+            throw new ParkingLotFullException(PARKING_LOT_IS_FULL);
         }
         if (carParkedMap.containsValue(car))
-            throw new Exception(SHOULD_NOT_PARK_SAME_CAR_TWICE);
+            throw new ShouldNotParkSameCarException(SHOULD_NOT_PARK_SAME_CAR_TWICE);
 
 
         carParkedMap.put(car.getVehicleIdentificationNumber(), car);
@@ -54,7 +57,7 @@ public class ParkingLot extends Observable {
         if (!carParkedMap.containsKey(vehicleIdentificationNumber)) {
             notifyFBIAgent(CAR_NOT_FOUND_IN_PARKING_LOT);
             notifyPoliceDepartment(CAR_NOT_FOUND_IN_PARKING_LOT);
-            throw new Exception(CAR_NOT_PARKED_IN_PARKING_LOT);
+            throw new CarNotParkedException(CAR_NOT_PARKED_IN_PARKING_LOT);
         }
         if (checkIfParkingLotIsLessThan80PercentFull())
             notifyFBIAgent(PARKING_LESS_THAN_EIGHTY_PERCENT_FULL);
