@@ -1,8 +1,0 @@
-com\bcus\letspark\parking\ParkingAttendantTest.class
-com\bcus\letspark\traveller\CarTest.class
-com\bcus\letspark\parking\FestiveSeasonStrategyTest.class
-com\bcus\letspark\parking\ParkingLotTest.class
-com\bcus\letspark\parking\NormalParkingStrategyTest.class
-com\bcus\letspark\parking\ParkingLotOwnerTest.class
-com\bcus\letspark\parking\TicketTest.class
-com\bcus\letspark\traveller\TravellerTest.class
