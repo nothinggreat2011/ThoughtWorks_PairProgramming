@@ -11,12 +11,20 @@ public class ParkingLot extends Observable {
     public static final String CAR_NOT_PARKED_IN_PARKING_LOT = "Car not parked in the parking lot";
     public static final String PARKING_LOT_IS_FULL = "Parking lot is full";
     private Map<String, Car> carParkedMap = null;
+    private static final String PARKING_MORE_THAN_EIGHTY_PERCENT_FULL = "PARKING_MORE_THAN_EIGHTY_PERCENT_FULL";
+    private static final String PARKING_LESS_THAN_EIGHTY_PERCENT_FULL = "PARKING_LESS_THAN_EIGHTY_PERCENT_FULL";
+    private static final String PARKING_AVAILABLE = "PARKING_AVAILABLE";
+    private static final String CAR_NOT_FOUND_IN_PARKING_LOT = "CAR_NOT_FOUND_IN_PARKING_LOT";
+    private static final String PARKING_FULL = "PARKING_FULL";
+    private static final String PARKING_EIGHTY_PERCENT_FULL = "PARKING_EIGHTY_PERCENT_FULL";
 
-    ArrayList<Observer> owners =  new ArrayList<>();
-    ArrayList<Observer> fbiAgents =  new ArrayList<>();
+    private ArrayList<Observer> owners =  new ArrayList<>();
+    private ArrayList<Observer> fbiAgents =  new ArrayList<>();
     private int parkingSize = 0;
     private boolean isFull;
     private String parkingLotId;
+    private ArrayList<Observer> policeDepartmentsList = new ArrayList<>();
+
     public  ParkingLot(String parkingLotId, int parkingSize) {
         this.parkingLotId = parkingLotId;
         carParkedMap = new HashMap<>();
@@ -43,23 +51,32 @@ public class ParkingLot extends Observable {
 
     public synchronized Car getCarFromParking(String vehicleIdentificationNumber) throws Exception {
         if(!carParkedMap.containsKey(vehicleIdentificationNumber)) {
-            notifyFBIAgent("CAR_NOT_FOUND_IN_PARKING_LOT");
+            notifyFBIAgent(CAR_NOT_FOUND_IN_PARKING_LOT);
+            notifyPoliceDepartment(CAR_NOT_FOUND_IN_PARKING_LOT);
             throw new Exception(CAR_NOT_PARKED_IN_PARKING_LOT);
         }
         Car carToBeReturned = carParkedMap.get(vehicleIdentificationNumber);
 
         if(isFull())
         {
-            notifyOwners("PARKING_AVAILABLE");
+            notifyOwners(PARKING_AVAILABLE);
         }
         if(verify80PercentFull()){
-            notifyFBIAgent("PARKING_LESS_THAN_EIGHTY_PERCENT_FULL");
+            notifyFBIAgent(PARKING_LESS_THAN_EIGHTY_PERCENT_FULL);
         }
         carParkedMap.remove(vehicleIdentificationNumber);
 
 
         notifyParkingLotObservers();
         return carToBeReturned;
+    }
+
+    private void notifyPoliceDepartment(String message) {
+
+        for(Observer observer : policeDepartmentsList)
+        {
+            observer.update(this, message);
+        }
     }
 
     public boolean isFull() {
@@ -74,7 +91,7 @@ public class ParkingLot extends Observable {
     private void verifyIfMoreThan80PercentFull() {
         if(verify80PercentFull())
         {
-            notifyFBIAgent("PARKING_MORE_THAN_EIGHTY_PERCENT_FULL");
+            notifyFBIAgent(PARKING_MORE_THAN_EIGHTY_PERCENT_FULL);
         }
 
     }
@@ -82,12 +99,12 @@ public class ParkingLot extends Observable {
     private void notifyParkingLotObservers() {
         if(isFull())
         {
-            notifyOwners("PARKING_FULL");
+            notifyOwners(PARKING_FULL);
         }
 
         if(verify80PercentFull())
         {
-            notifyFBIAgent("PARKING_EIGHTY_PERCENT_FULL");
+            notifyFBIAgent(PARKING_EIGHTY_PERCENT_FULL);
         }
 
     }
@@ -113,6 +130,11 @@ public class ParkingLot extends Observable {
 
         if(observer instanceof ParkingLotOwner){
             owners.add(observer);
+            return;
+        }
+        else if(observer instanceof PoliceDepartment)
+        {
+            policeDepartmentsList.add(observer);
             return;
         }
         fbiAgents.add(observer);

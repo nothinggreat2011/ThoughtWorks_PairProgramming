@@ -20,6 +20,8 @@ public class ParkingLotTest {
     public final ExpectedException expectedException = ExpectedException.none();
     private final int parkingSize = 2;
     private String parkingLotId = "Some parking";
+    private static final String VEHICLE_ID = "some vehicle id";
+    private static final String CAR_NOT_FOUND_IN_PARKING_LOT = "CAR_NOT_FOUND_IN_PARKING_LOT";
 
     @Test
     public void createParkingLot()
@@ -32,7 +34,7 @@ public class ParkingLotTest {
     @Test
     public void addCarToParkingLotShouldReturnParkingTicket() throws Exception {
         ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
-        Car car = new Car("some id");
+        Car car = new Car(VEHICLE_ID);
         Ticket ticket = parkingLot.parkCar(car);
         assertNotNull(ticket);
     }
@@ -54,7 +56,7 @@ public class ParkingLotTest {
     @Test
     public void getMyCarCorrectly() throws Exception {
 
-        Car carToBeParked = new Car("some vehicle id");
+        Car carToBeParked = new Car(VEHICLE_ID);
         ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         parkingLot.parkCar(carToBeParked);
         Car carReturnedFromParkingLot = parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
@@ -66,7 +68,7 @@ public class ParkingLotTest {
     public void shouldNotBeAbleToGetMyCarTwice() throws Exception {
         expectedException.expect(Exception.class);
         expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
-        Car carToBeParked = new Car("some vehicle id");
+        Car carToBeParked = new Car(VEHICLE_ID);
         ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         parkingLot.parkCar(carToBeParked);
         Car carReturnedFromParkingLot = parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
@@ -282,7 +284,7 @@ public class ParkingLotTest {
         parkingLot.parkCar(car);
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
-        verify(fbiAgent,times(1)).update(parkingLot, "CAR_NOT_FOUND_IN_PARKING_LOT");
+        verify(fbiAgent,times(1)).update(parkingLot,CAR_NOT_FOUND_IN_PARKING_LOT );
     }
 
     @Test
@@ -298,4 +300,44 @@ public class ParkingLotTest {
         verify(fbiAgent,never()).update(any(ParkingLot.class), anyString());
     }
 
+    @Test
+    public void shouldBeAbleNotifyPoliceDepartmentWhenCarIsNotPresentWhileUnparking() throws Exception {
+        expectedException.expect(Exception.class);
+        expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
+        PoliceDepartment policeDepartment = mock(PoliceDepartment.class);
+        parkingLot.addObserver(policeDepartment);
+        parkingLot.getCarFromParking("invalidNoNotPresent");
+        verify(policeDepartment,times(1)).update(parkingLot, "CAR_NOT_FOUND_IN_PARKING_LOT");
+    }
+
+    @Test
+    public void shouldBeAbleNotifyPoliceDepartmentWhenACarIsUnparkedTwiceFromTheParkingLot() throws Exception {
+        expectedException.expect(Exception.class);
+        expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
+        PoliceDepartment policeDepartment = mock(PoliceDepartment.class);
+        parkingLot.addObserver(policeDepartment);
+
+        Car car = new Car("car vehicle id");
+        parkingLot.parkCar(car);
+        parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
+        parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
+        verify(policeDepartment,times(1)).update(parkingLot,CAR_NOT_FOUND_IN_PARKING_LOT );
+    }
+
+    @Test
+    public void shouldNotNotifyPoliceDeppartmentWhenAParkedCarIsUnparkedFromTheParkingLot() throws Exception {
+        int parkingLotSize = 5;
+        ParkingLot parkingLot = new ParkingLot(parkingLotId , parkingLotSize);
+        PoliceDepartment policeDepartment = mock(PoliceDepartment.class);
+        parkingLot.addObserver(policeDepartment);
+
+        Car car = new Car("car vehicle id");
+        parkingLot.parkCar(car);
+        parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
+        verify(policeDepartment,never()).update(any(ParkingLot.class), anyString());
+    }
 }
