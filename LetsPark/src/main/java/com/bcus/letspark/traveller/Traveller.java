@@ -1,5 +1,6 @@
 package com.bcus.letspark.traveller;
 
+import com.bcus.letspark.exceptions.EmptyInputException;
 import com.bcus.letspark.parking.ParkingLot;
 import com.bcus.letspark.parking.ParkingLotAttendant;
 import com.bcus.letspark.parking.Ticket;
@@ -16,15 +17,11 @@ public class Traveller {
     }
 
 
-    /*public boolean travel() throws Exception {
-
-
-    }*/
 
     public boolean parkMyCar(ParkingLotAttendant parkingLotAttendant) throws Exception {
-        if(parkingLotAttendant == null)
-        {
-            throw new Exception(NO_PARKING_ATTENDANT_ASSIGNED);
+        if(parkingLotAttendant == null){
+
+            throw new EmptyInputException(NO_PARKING_ATTENDANT_ASSIGNED);
         }
         ticket = parkingLotAttendant.parkCar(myCar);
         System.out.println("I am flying out to my client's site. My car is parked. ");

@@ -3,6 +3,7 @@ package com.bcus.letspark.traveller;
 
 public class Car {
 
+
     private final String vehicleIdentificationNumber;
     private final CarSize carSize;
 

@@ -8,7 +8,6 @@ import java.util.Observer;
  */
 public class PoliceDepartment implements Observer{
 
-
     @Override
     public void update(Observable parkingLot, Object message) {
         System.out.println(message);
