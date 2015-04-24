@@ -22,7 +22,7 @@ public class TravellerTest {
     @Before
     public void setUp() throws Exception {
         parkingLot = mock(ParkingLot.class);
-        car = new Car(CarSize.SMALL,"My car");
+        car = new Car("Red", CarSize.SMALL,"My car");
 
     }
 
@@ -33,7 +33,7 @@ public class TravellerTest {
     @Test
     public void createTravelerWithANewCar()
     {
-        Car travellerCar = new Car(CarSize.SMALL,"My car");
+        Car travellerCar = new Car("Red", CarSize.SMALL,"My car");
         Traveller traveller = new Traveller(travellerCar);
         Assert.assertNotNull(traveller);
     }

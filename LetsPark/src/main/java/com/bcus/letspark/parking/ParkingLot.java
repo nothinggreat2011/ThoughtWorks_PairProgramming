@@ -154,4 +154,8 @@ public class ParkingLot extends Observable {
     public int getAvailableParkingSpace() {
         return parkingSize - carParkedMap.size();
     }
+
+    public List<Car> getParkedCars() {
+        return (List<Car>)carParkedMap.values();
+    }
 }

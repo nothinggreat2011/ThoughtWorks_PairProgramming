@@ -22,7 +22,7 @@ public class NormalParkingStrategyTest {
         int parkingLotSize = 5;
         ParkingLot parkingLot = new ParkingLot("some parking id", parkingLotSize);
         parkingLots.add(parkingLot);
-        Car car = new Car(CarSize.SMALL, "some id");
+        Car car = new Car("Red", CarSize.SMALL, "some id");
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
         ParkingLot parkingLotReturned = parkingLotAttendant.getMeFreeParkingLot(car);
         Assert.assertEquals(parkingLot, parkingLotReturned);

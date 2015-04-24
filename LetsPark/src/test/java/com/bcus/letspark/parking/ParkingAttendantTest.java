@@ -36,7 +36,7 @@ public class ParkingAttendantTest {
         ParkingLot parkingLot = mock(ParkingLot.class);
         when(parkingLot.isFull()).thenReturn(true);
         parkingLots.add(parkingLot);
-        Car car = new Car(CarSize.SMALL, "some car id");
+        Car car = new Car("Red", CarSize.SMALL, "some car id");
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
 
 
@@ -52,7 +52,7 @@ public class ParkingAttendantTest {
         ParkingLot parkingLot = mock(ParkingLot.class);
         when(parkingLot.isFull()).thenReturn(true);
         parkingLots.add(parkingLot);
-        Car car = new Car(CarSize.SMALL, "some car id");
+        Car car = new Car("Red", CarSize.SMALL, "some car id");
 
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
 
@@ -71,7 +71,7 @@ public class ParkingAttendantTest {
         int parkingLotSize = 5;
         ParkingLot parkingLot = new ParkingLot("parking id", parkingLotSize);
         parkingLots.add(parkingLot);
-        Car car = new Car(CarSize.SMALL,"some car id");
+        Car car = new Car("Red", CarSize.SMALL,"some car id");
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
         Ticket ticket = parkingLot.parkCar(car);
         Car carReturned = parkingLotAttendant.unparkCar(ticket);
@@ -91,7 +91,7 @@ public class ParkingAttendantTest {
         parkingLots.add(parkingLotOne);
         parkingLots.add(parkingLotTwo);
         parkingLots.add(parkingLotMostFreeSpace);
-        Car carToBeParked = new Car(CarSize.BIG,"some car id");
+        Car carToBeParked = new Car("Red", CarSize.BIG,"some car id");
         ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant(parkingLots);
         parkingLotAttendant.setParkingStrategy(new NormalParkingStrategy());
         Ticket ticket = parkingLotAttendant.parkCar(carToBeParked);

@@ -21,7 +21,7 @@ public class FestiveSeasonStrategyTest {
         List<ParkingLot> parkingLots = new ArrayList<>();
         int parkingLotSize = 5;
 
-        Car car = new Car(CarSize.SMALL, "some car id");
+        Car car = new Car("Red", CarSize.SMALL, "some car id");
 
         ParkingLot parkingLotA = new ParkingLot("Parking A", 1);
         ParkingLot parkingLotB = new ParkingLot("Parking B", 2);
@@ -48,7 +48,7 @@ public class FestiveSeasonStrategyTest {
         parkingLots.add(parkingLotA);
         parkingLots.add(parkingLotB);
         parkingLots.add(parkingLotC);
-        Car car = new Car(CarSize.SMALL, "some car id");
+        Car car = new Car("Red", CarSize.SMALL, "some car id");
 
 
         when(parkingLotC.isFull()).thenReturn(true);

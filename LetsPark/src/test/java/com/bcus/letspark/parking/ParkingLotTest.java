@@ -35,7 +35,7 @@ public class ParkingLotTest {
     @Test
     public void addCarToParkingLotShouldReturnParkingTicket() throws Exception {
         ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
-        Car car = new Car(CarSize.SMALL,VEHICLE_ID);
+        Car car = new Car("Red", CarSize.SMALL,VEHICLE_ID);
         Ticket ticket = parkingLot.parkCar(car);
         assertNotNull(ticket);
     }
@@ -48,7 +48,7 @@ public class ParkingLotTest {
         expectedException.expect(Exception.class);
         expectedException.expectMessage(ParkingLot.SHOULD_NOT_PARK_SAME_CAR_TWICE);
         ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
-        Car carOne = new Car(CarSize.SMALL,"some id");
+        Car carOne = new Car("Red", CarSize.SMALL,"some id");
         parkingLot.parkCar(carOne);
         Car sameCar = carOne;
         parkingLot.parkCar(sameCar);
@@ -57,7 +57,7 @@ public class ParkingLotTest {
     @Test
     public void getMyCarCorrectly() throws Exception {
 
-        Car carToBeParked = new Car(CarSize.SMALL,VEHICLE_ID);
+        Car carToBeParked = new Car("Red", CarSize.SMALL,VEHICLE_ID);
         ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         parkingLot.parkCar(carToBeParked);
         Car carReturnedFromParkingLot = parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
@@ -69,7 +69,7 @@ public class ParkingLotTest {
     public void shouldNotBeAbleToGetMyCarTwice() throws Exception {
         expectedException.expect(Exception.class);
         expectedException.expectMessage(ParkingLot.CAR_NOT_PARKED_IN_PARKING_LOT);
-        Car carToBeParked = new Car(CarSize.SMALL,VEHICLE_ID);
+        Car carToBeParked = new Car("Red", CarSize.SMALL,VEHICLE_ID);
         ParkingLot parkingLot = new ParkingLot(parkingLotId, parkingSize);
         parkingLot.parkCar(carToBeParked);
         Car carReturnedFromParkingLot = parkingLot.getCarFromParking(carToBeParked.getVehicleIdentificationNumber());
@@ -92,10 +92,10 @@ public class ParkingLotTest {
         expectedException.expectMessage(ParkingLot.PARKING_LOT_IS_FULL);
         int parkingSize = 1;
         ParkingLot parkinglot = new ParkingLot(parkingLotId, parkingSize);
-        Car firstCar = new Car(CarSize.SMALL,"first car id");
+        Car firstCar = new Car("Red", CarSize.SMALL,"first car id");
         parkinglot.parkCar(firstCar);
 
-        Car secondCar = new Car(CarSize.SMALL,"second car id");
+        Car secondCar = new Car("Red", CarSize.SMALL,"second car id");
         parkinglot.parkCar(secondCar);
     }
 
@@ -104,10 +104,10 @@ public class ParkingLotTest {
 
         int parkingSize = 1;
         ParkingLot parkinglot = new ParkingLot(parkingLotId, parkingSize);
-        Car firstCar = new Car(CarSize.SMALL,"first car id");
+        Car firstCar = new Car("Red", CarSize.SMALL,"first car id");
         parkinglot.parkCar(firstCar);
         parkinglot.getCarFromParking(firstCar.getVehicleIdentificationNumber());
-        Car secondCar = new Car(CarSize.SMALL,"second car id");
+        Car secondCar = new Car("Red", CarSize.SMALL,"second car id");
         Ticket ticket =  parkinglot.parkCar(secondCar);
         assertNotNull(ticket);
     }
@@ -118,8 +118,8 @@ public class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(parkingLotId, 2);
         parkingLotOwner = mock(ParkingLotOwner.class);
         parkingLot.addObserver(parkingLotOwner);
-        Car carOne = new Car(CarSize.SMALL,"One");
-        Car carTwo = new Car(CarSize.SMALL,"two");
+        Car carOne = new Car("Red", CarSize.SMALL,"One");
+        Car carTwo = new Car("Red", CarSize.SMALL,"two");
         parkingLot.parkCar(carOne);
         parkingLot.parkCar(carTwo);
         verify(parkingLotOwner,times(1)).update(parkingLot, "PARKING_FULL");
@@ -132,14 +132,14 @@ public class ParkingLotTest {
         parkingLotOwner = mock(ParkingLotOwner.class);
         parkingLot.addObserver(parkingLotOwner);
 
-        Car carOne = new Car(CarSize.SMALL,"One");
-        Car carTwo = new Car(CarSize.SMALL,"two");
+        Car carOne = new Car("Red", CarSize.SMALL,"One");
+        Car carTwo = new Car("Red", CarSize.SMALL,"two");
         parkingLot.parkCar(carOne);
         parkingLot.parkCar(carTwo);
 
         parkingLot.getCarFromParking(carOne.getVehicleIdentificationNumber());
         parkingLot.getCarFromParking(carTwo.getVehicleIdentificationNumber());
-        verify(parkingLotOwner,times(2)).update((Observable) any(), anyString());
+        verify(parkingLotOwner, times(2)).update((Observable) any(), anyString());
 
     }
 
@@ -150,11 +150,11 @@ public class ParkingLotTest {
         parkingLotOwner = mock(ParkingLotOwner.class);
         parkingLot.addObserver(parkingLotOwner);
 
-        Car carOne = new Car(CarSize.SMALL,"One");
+        Car carOne = new Car("Red", CarSize.SMALL,"One");
         parkingLot.parkCar(carOne);
 
         parkingLot.getCarFromParking(carOne.getVehicleIdentificationNumber());
-        verify(parkingLotOwner,never()).update((Observable) any(), anyString());
+        verify(parkingLotOwner, never()).update((Observable) any(), anyString());
 
     }
 
@@ -165,10 +165,10 @@ public class ParkingLotTest {
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
 
-        Car carOne = new Car(CarSize.SMALL,"One");
-        Car carTwo = new Car(CarSize.SMALL,"Two");
-        Car carThree = new Car(CarSize.SMALL,"Three");
-        Car carFour = new Car(CarSize.SMALL,"Four");
+        Car carOne = new Car("Red", CarSize.SMALL,"One");
+        Car carTwo = new Car("Red", CarSize.SMALL,"Two");
+        Car carThree = new Car("Red", CarSize.SMALL,"Three");
+        Car carFour = new Car("Red", CarSize.SMALL,"Four");
         parkingLot.parkCar(carOne);
         parkingLot.parkCar(carTwo);
         parkingLot.parkCar(carThree);
@@ -183,12 +183,12 @@ public class ParkingLotTest {
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
 
-        Car carOne = new Car(CarSize.SMALL,"One");
-        Car carTwo = new Car(CarSize.SMALL,"Two");
-        Car carThree = new Car(CarSize.SMALL,"Three");
-        Car carFour = new Car(CarSize.SMALL,"Four");
-        Car carFive = new Car(CarSize.SMALL,"Five");
-        Car carSix = new Car(CarSize.SMALL,"Six");
+        Car carOne = new Car("Red", CarSize.SMALL,"One");
+        Car carTwo = new Car("Red", CarSize.SMALL,"Two");
+        Car carThree = new Car("Red", CarSize.SMALL,"Three");
+        Car carFour = new Car("Red", CarSize.SMALL,"Four");
+        Car carFive = new Car("Red", CarSize.SMALL,"Five");
+        Car carSix = new Car("Red", CarSize.SMALL,"Six");
 
         parkingLot.parkCar(carOne);
         parkingLot.parkCar(carTwo);
@@ -200,7 +200,7 @@ public class ParkingLotTest {
         parkingLot.getCarFromParking(ticketTwo.getVehicleIdentificationNumber());
         parkingLot.getCarFromParking(ticketThree.getVehicleIdentificationNumber());
         verify(fbiAgent,times(1)).update(parkingLot, "PARKING_MORE_THAN_EIGHTY_PERCENT_FULL");
-        verify(fbiAgent,times(1)).update(parkingLot, "PARKING_LESS_THAN_EIGHTY_PERCENT_FULL");
+        verify(fbiAgent, times(1)).update(parkingLot, "PARKING_LESS_THAN_EIGHTY_PERCENT_FULL");
     }
 
 
@@ -214,15 +214,15 @@ public class ParkingLotTest {
         parkingLot.addObserver((fbiAgent));
         parkingLot.addObserver(parkingLotOwner);
 
-        Car carOne = new Car(CarSize.SMALL,"One");
-        Car carTwo = new Car(CarSize.SMALL,"Two");
-        Car carThree = new Car(CarSize.SMALL,"Three");
-        Car carFour = new Car(CarSize.SMALL,"Four");
+        Car carOne = new Car("Red", CarSize.SMALL,"One");
+        Car carTwo = new Car("Red", CarSize.SMALL,"Two");
+        Car carThree = new Car("Red", CarSize.SMALL,"Three");
+        Car carFour = new Car("Red",CarSize.SMALL,"Four");
         parkingLot.parkCar(carOne);
         parkingLot.parkCar(carTwo);
         parkingLot.parkCar(carThree);
         parkingLot.parkCar(carFour);
-        verify(parkingLotOwner,never()).update(any(ParkingLot.class), anyString());
+        verify(parkingLotOwner, never()).update(any(ParkingLot.class), anyString());
 
     }
 
@@ -233,11 +233,11 @@ public class ParkingLotTest {
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
 
-        Car carOne = new Car(CarSize.SMALL,"One");
-        Car carTwo = new Car(CarSize.SMALL,"Two");
-        Car carThree = new Car(CarSize.SMALL,"Three");
-        Car carFour = new Car(CarSize.SMALL,"Four");
-        Car carFive = new Car(CarSize.SMALL,"Five");
+        Car carOne = new Car("Red", CarSize.SMALL,"One");
+        Car carTwo = new Car("Red", CarSize.SMALL,"Two");
+        Car carThree = new Car("Red", CarSize.SMALL,"Three");
+        Car carFour = new Car("Red", CarSize.SMALL,"Four");
+        Car carFive = new Car("Red", CarSize.SMALL,"Five");
         parkingLot.parkCar(carOne);
         parkingLot.parkCar(carTwo);
         parkingLot.parkCar(carThree);
@@ -267,11 +267,11 @@ public class ParkingLotTest {
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
 
-        Car car = new Car(CarSize.SMALL,"car vehicle id");
+        Car car = new Car("Red", CarSize.SMALL,"car vehicle id");
         parkingLot.parkCar(car);
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
-        verify(fbiAgent,times(1)).update(parkingLot,CAR_NOT_FOUND_IN_PARKING_LOT );
+        verify(fbiAgent, times(1)).update(parkingLot,CAR_NOT_FOUND_IN_PARKING_LOT );
     }
 
     @Test
@@ -281,10 +281,10 @@ public class ParkingLotTest {
         FBIAgent fbiAgent = mock(FBIAgent.class);
         parkingLot.addObserver((fbiAgent));
 
-        Car car = new Car(CarSize.SMALL,"car vehicle id");
+        Car car = new Car("Red", CarSize.SMALL,"car vehicle id");
         parkingLot.parkCar(car);
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
-        verify(fbiAgent,never()).update(any(ParkingLot.class), anyString());
+        verify(fbiAgent, never()).update(any(ParkingLot.class), anyString());
     }
 
     @Test
@@ -308,7 +308,7 @@ public class ParkingLotTest {
         PoliceDepartment policeDepartment = mock(PoliceDepartment.class);
         parkingLot.addObserver(policeDepartment);
 
-        Car car = new Car(CarSize.SMALL,"car vehicle id");
+        Car car = new Car("Red", CarSize.SMALL,"car vehicle id");
         parkingLot.parkCar(car);
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
@@ -322,7 +322,7 @@ public class ParkingLotTest {
         PoliceDepartment policeDepartment = mock(PoliceDepartment.class);
         parkingLot.addObserver(policeDepartment);
 
-        Car car = new Car(CarSize.SMALL,"car vehicle id");
+        Car car = new Car("Red", CarSize.SMALL,"car vehicle id");
         parkingLot.parkCar(car);
         parkingLot.getCarFromParking(car.getVehicleIdentificationNumber());
         verify(policeDepartment,never()).update(any(ParkingLot.class), anyString());

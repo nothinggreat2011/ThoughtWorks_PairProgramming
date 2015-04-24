@@ -6,10 +6,12 @@ public class Car {
 
     private final String vehicleIdentificationNumber;
     private final CarSize carSize;
+    private  final String color;
 
 
 
-    public Car(CarSize carSize, String vehicleIdentificationNumber) {
+    public Car(String color, CarSize carSize, String vehicleIdentificationNumber) {
+        this.color = color;
         this.vehicleIdentificationNumber = vehicleIdentificationNumber;
         this.carSize = carSize;
 
@@ -21,5 +23,9 @@ public class Car {
 
     public CarSize getSize() {
         return carSize;
+    }
+
+    public String getColor() {
+        return color;
     }
 }
