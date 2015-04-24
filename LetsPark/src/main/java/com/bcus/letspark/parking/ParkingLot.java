@@ -31,7 +31,11 @@ public class ParkingLot extends Observable {
         }
         if(carParkedMap.containsValue(car))
             throw new Exception(SHOULD_NOT_PARK_SAME_CAR_TWICE);
+
+        verifyIfMoreThan80PercentFull();
+
         carParkedMap.put(car.getVehicleIdentificationNumber(), car);
+
         notifyParkingLotObservers();
         Ticket ticket = new Ticket(this.parkingLotId,car.getVehicleIdentificationNumber());
         return  ticket;
@@ -48,7 +52,12 @@ public class ParkingLot extends Observable {
         {
             notifyOwners("PARKING_AVAILABLE");
         }
+        if(verify80PercentFull()){
+            notifyFBIAgent("PARKING_LESS_THAN_EIGHTY_PERCENT_FULL");
+        }
         carParkedMap.remove(vehicleIdentificationNumber);
+
+
         notifyParkingLotObservers();
         return carToBeReturned;
     }
@@ -60,6 +69,14 @@ public class ParkingLot extends Observable {
     private boolean verify80PercentFull() {
         double percentFull = calculatePercentageFull();
         return percentFull == 80;
+    }
+
+    private void verifyIfMoreThan80PercentFull() {
+        if(verify80PercentFull())
+        {
+            notifyFBIAgent("PARKING_MORE_THAN_EIGHTY_PERCENT_FULL");
+        }
+
     }
 
     private void notifyParkingLotObservers() {
